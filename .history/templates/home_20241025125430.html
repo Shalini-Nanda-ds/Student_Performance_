@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Performance Indicator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #080808; /* Dark background color */
+            color: #ffffff; /* Text color */
+        }
+        .container {
+            position: relative;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 1; /* Ensure content is above video */
+        }
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ff9900; /* Orange color */
+        }
+        form {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-label {
+            font-weight: bold;
+            color: #ff9900; /* Orange color */
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #666666; /* Dark gray border */
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #222222; /* Dark background color for inputs */
+            color: #ffffff; /* Text color */
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #ff9900; /* Orange color */
+            border: none;
+            border-radius: 5px;
+            color: #ffffff; /* Text color */
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+        .btn:hover {
+            background-color: #ff6600; /* Darker orange color on hover */
+        }
+        .result {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .result h2 {
+            font-size: 24px;
+            color: #ff9900; /* Orange color */
+        }
+    </style>
+</head>
+<body>
+    <video autoplay loop muted>
+        <source src="E:\Projects\mlproject\images\study.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="container">
+        <h1>Student Exam Performance Indicator</h1>
+        <form action="{{ url_for('predict_datapoint')}}" method="post">
+            <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select class="form-control" name="gender" required>
+                    <option value="" disabled selected>Select your Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Race or Ethnicity</label>
+                <select class="form-control" name="ethnicity" required>
+                    <option value="" disabled selected>Select Ethnicity</option>
+                    <option value="group A">Group A</option>
+                    <option value="group B">Group B</option>
+                    <option value="group C">Group C</option>
+                    <option value="group D">Group D</option>
+                    <option value="group E">Group E</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Parental Level of Education</label>
+                <select class="form-control" name="parental_level_of_education" required>
+                    <option value="" disabled selected>Select Parent Education</option>
+                    <option value="associate's degree">Associate's Degree</option>
+                    <option value="bachelor's degree">Bachelor's Degree</option>
+                    <option value="high school">High School</option>
+                    <option value="master's degree">Master's Degree</option>
+                    <option value="some college">Some College</option>
+                    <option value="some high school">Some High School</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Lunch Type</label>
+                <select class="form-control" name="lunch" required>
+                    <option value="" disabled selected>Select Lunch Type</option>
+                    <option value="free/reduced">Free/Reduced</option>
+                    <option value="standard">Standard</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Test Preparation Course</label>
+                <select class="form-control" name="test_preparation_course" required>
+                    <option value="" disabled selected>Select Test Course</option>
+                    <option value="none">None</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Writing Score out of 100</label>
+                <input class="form-control" type="number" name="reading_score" min="0" max="100" placeholder="Enter your Writing score" required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Reading Score out of 100</label>
+                <input class="form-control" type="number" name="writing_score" min="0" max="100" placeholder="Enter your Reading score" required />
+            </div>
+            <div class="form-group">
+                <input class="btn" type="submit" value="Predict your Maths Score" onclick="changeColor()" required />
+            </div>
+        </form>
+        <div class="result">
+            <h2>Prediction: {{results}}</h2>
+        </div>
+    </div>
+
+    <script>
+        function changeColor() {
+            var container = document.querySelector('.container');
+            container.style.backgroundColor = '#ff0000'; // Change to desired color
+            setTimeout(function() {
+                container.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Change back to original color
+            }, 300); // Adjust the duration of color change (300 milliseconds in this case)
+        }
+    </script>
+</body>
+</html>
