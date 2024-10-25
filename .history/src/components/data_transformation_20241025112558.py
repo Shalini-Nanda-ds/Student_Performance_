@@ -1,17 +1,14 @@
 import sys
 from dataclasses import dataclass
-
 import numpy as np 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-
 from src.exception import CustomException
 from src.logger import logging
 import os
-
 from src.utils import save_object
 
 @dataclass
@@ -73,15 +70,7 @@ class DataTransformation:
 
             logging.info("Read train and test data completed")
 
-            # Convert non-numeric values to NaN in numerical columns
-            train_df["writing_score"] = pd.to_numeric(train_df["writing_score"], errors='coerce')
-            train_df["reading_score"] = pd.to_numeric(train_df["reading_score"], errors='coerce')
-            
-            test_df["writing_score"] = pd.to_numeric(test_df["writing_score"], errors='coerce')
-            test_df["reading_score"] = pd.to_numeric(test_df["reading_score"], errors='coerce')
-
             logging.info("Obtaining preprocessing object")
-
             preprocessing_obj = self.get_data_transformer_object()
 
             target_column_name = "math_score"
@@ -93,9 +82,7 @@ class DataTransformation:
             input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)
             target_feature_test_df = test_df[target_column_name]
 
-            logging.info(
-                "Applying preprocessing object on training dataframe and testing dataframe."
-            )
+            logging.info("Applying preprocessing object on training and testing data")
 
             input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
@@ -105,7 +92,7 @@ class DataTransformation:
             ]
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
-            logging.info("Saved preprocessing object.")
+            logging.info("Saved preprocessing object")
 
             save_object(
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
@@ -117,5 +104,6 @@ class DataTransformation:
                 test_arr,
                 self.data_transformation_config.preprocessor_obj_file_path,
             )
+
         except Exception as e:
             raise CustomException(e, sys)
